@@ -18,7 +18,11 @@ module.exports = async (req, res) => {
   try {
     await handleUpdate(req.body);
   } catch (e) {
+    // 500 вместо «проглоченной» ошибки: Telegram покажет сбой в getWebhookInfo
+    // (last_error_message) и повторит доставку обновления позже.
     console.error('update failed:', e);
+    res.status(500).json({ ok: false, error: String((e && e.message) || e) });
+    return;
   }
   res.status(200).json({ ok: true });
 };
