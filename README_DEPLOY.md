@@ -119,6 +119,10 @@ npm run dev            # long polling, вебхук не нужен
 | Сборка Vercel падает: `unused_function: The pattern "api/cron.js" ... doesn't match any Serverless Functions` | В репозитории нет папки `api/` — на GitHub залиты не все файлы. В логе сборки это видно по строке `Downloading N deployment files` (должно быть ~20, а не 5–8). Загрузи в репозиторий всё содержимое проекта: папки `api`, `lib`, `scripts` и файлы из корня — и сделай Redeploy |
 | Деплой Ready, но `<адрес>/api/webhook` даёт `404 NOT_FOUND` | Функции не задеплоились: папки `api/` нет в репозитории, или весь проект лежит внутри вложенной папки-обёртки. Открой главную страницу репозитория — на верхнем уровне должны лежать `api`, `lib`, `scripts` и файлы, а не одна папка `kopilka-bot` |
 | `api.telegram.org/bot<TOKEN>/setWebhook...` отвечает `404 Not Found` | Плейсхолдер `<TOKEN>` не заменён настоящим токеном. Удали скобки `< >` и вставь полный токен из BotFather (вида `1234567890:AAE...`), без пробелов и кавычек |
+| `git commit` падает: `Author identity unknown` / `Please tell me who you are` | Git не знает, кого указать автором коммита. Один раз выполни `git config --global user.name "твой_логин_github"` и `git config --global user.email "логин@users.noreply.github.com"`, затем повтори `git commit` |
+| `git push` падает: `src refspec main does not match any` | Коммит не создался (см. строку выше) — пушить нечего. Сначала `git commit -m "..."`, потом `git push` |
+| `git remote add origin ...` отвечает `remote origin already exists` | Не поломка: адрес уже прописан. Пропусти эту команду и сразу делай `git push` |
+| `git push` отвечает `rejected ... non-fast-forward` / `fetch first` | На GitHub уже лежат файлы, залитые через сайт, а локальная история с ними не связана. Для первого пуша безопасно: `git push -u origin main --force` — веб-версия перезапишется полной локальной |
 | `{"ok":false,"error_code":401}` на любом запросе | неверный токен — проверь BOT_TOKEN |
 | Бот молчит в группе | privacy mode включён → BotFather `/setprivacy` → Disable |
 | `409 Conflict` в логах Vercel | где-то запущен `npm run dev` (polling) параллельно с вебхуком — останови его |
