@@ -1,4 +1,4 @@
-const { bot } = require('../lib/bot');
+const { bot, ensureInit } = require('../lib/bot');
 const dbx = require('../lib/db');
 const { formatReport } = require('../lib/reports');
 const { budgetWarnings } = require('../lib/budgets');
@@ -18,6 +18,8 @@ module.exports = async (req, res) => {
       res.status(200).json({ ok: true, skipped: 'not sunday' });
       return;
     }
+
+    await ensureInit();
 
     const households = await dbx.listHouseholds();
     let sent = 0;
